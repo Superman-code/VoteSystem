@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+   "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+   "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="default" extends="struts-default">
+		<action name="addVote" class="org.xkj.action.AddVoteAction">
+			<result name="success" type="redirect">showVote</result>
+		</action>
+		<action name="showVote" class="org.xkj.action.ShowVoteAction">
+			<result name="success">/admin/index.jsp</result>
+		</action>
+		<action name="deleteVote" class="org.xkj.action.DeleteVoteAction">
+			<result name="success" type="redirect">showVote</result>
+		</action>
+		<action name="addChannel" class="org.xkj.action.AddChannelAction">
+			<result name="success" type="redirect">findAllChannel_addVote</result>
+		</action>
+		<action name="findAllChannel_*" class="org.xkj.action.FindAllChannelAction" method="{1}">
+			<result name="addVote">/admin/{1}.jsp</result>
+			<result name="manageChannel">/admin/{1}.jsp</result>
+			<result name="index" type="redirect">/{1}.jsp</result>
+		</action>
+		<action name="deleteChannel" class="org.xkj.action.DeleteChannelAction">
+			<result name="success" type="redirect">findAllChannel_manageChannel</result>
+		</action>
+		
+		<action name="getVoteInfo" class="org.xkj.action.GetVoteInfoAction">
+			<result name="success">voteInfo.jsp</result>
+		</action>
+		
+		<action name="doVote" class="org.xkj.action.DoVoteAction">
+			<!--未解决的问题：
+			为什么使用redirectAction传值时会报500错误
+			 <result name="success" type="redirectAction">
+				<param name="actionName">voteResult</param>
+				<param name="voteID">${voteID}</param> 
+			</result>-->
+			<result name="success" type="chain">voteResult</result>
+			<result name="input" type="chain">getVoteInfo</result>
+		</action>
+		
+	</package>
+	
+	<package name="jfreechart" extends="jfreechart-default">
+		<action name="voteResult" class="org.xkj.action.VoteResultAction">
+			<result name="success" type="chart">
+				<param name="width">500</param>
+				<param name="height">400</param>
+			</result>
+		</action>
+	</package>
+</struts>
